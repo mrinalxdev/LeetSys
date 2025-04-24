@@ -44,40 +44,61 @@ export function QuestionFilters() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row gap-3">
-        <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="text"
-            placeholder="Search questions..."
-            className="pl-8"
-            value={searchTerm}
-            onChange={handleSearchChange}
-          />
-        </div>
-        <div className="flex gap-2">
-          {difficultyOptions.map((option) => {
-            const isSelected = filterByDifficulty.includes(option.id);
-            const badgeClass = isSelected
-              ? "ml-1 text-xs"
-              : `ml-1 text-xs ${option.color} text-white`;
+    // <div className="space-y-4">
+    //   <div className="flex flex-col sm:flex-row gap-3">
+    //     <div className="relative flex-1">
+    //       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+    //       <Input
+    //         type="text"
+    //         placeholder="Search questions..."
+    //         className="pl-8"
+    //         value={searchTerm}
+    //         onChange={handleSearchChange}
+    //       />
+    //     </div>
+    //     <div className="flex gap-2">
+    //       {difficultyOptions.map((option) => {
+    //         const isSelected = filterByDifficulty.includes(option.id);
+    //         const badgeClass = isSelected
+    //           ? "ml-1 text-xs"
+    //           : `ml-1 text-xs ${option.color} text-white`;
 
-            return (
-              <Button
-                key={option.id}
-                variant={isSelected ? "default" : "outline"}
-                onClick={() => toggleDifficultyFilter(option.id)}
-                className="relative"
-              >
-                {option.label}
-                <Badge variant="secondary" className={badgeClass}>
-                  {difficultyCounts[option.id as keyof typeof difficultyCounts]}
-                </Badge>
-              </Button>
-            );
-          })}
-        </div>
+    //         return (
+    //           <Button
+    //             key={option.id}
+    //             variant={isSelected ? "default" : "outline"}
+    //             onClick={() => toggleDifficultyFilter(option.id)}
+    //             className="relative"
+    //           >
+    //             {option.label}
+    //             <Badge variant="secondary" className={badgeClass}>
+    //               {difficultyCounts[option.id as keyof typeof difficultyCounts]}
+    //             </Badge>
+    //           </Button>
+    //         );
+    //       })}
+    //     </div>
+    //   </div>
+    // </div>
+    <div className="space-y-4">
+      <h3 className="font-medium">Filter by Difficulty</h3>
+      <div className="space-y-2">
+        {difficultyOptions.map((option) => {
+          const isSelected = filterByDifficulty.includes(option.id);
+          return (
+            <Button
+              key={option.id}
+              variant={isSelected ? "default" : "outline"}
+              onClick={() => toggleDifficultyFilter(option.id)}
+              className="w-full justify-between"
+            >
+              <span>{option.label}</span>
+              <Badge variant="secondary">
+                {difficultyCounts[option.id as keyof typeof difficultyCounts]}
+              </Badge>
+            </Button>
+          );
+        })}
       </div>
     </div>
   );

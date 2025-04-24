@@ -12,46 +12,43 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Settings } from "lucide-react";
 import { Toaster } from "sonner";
+import { Sidebar } from '@/components/sidebar';
 
 export default function ClientBody() {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   return (
     <QuestionProvider>
-      <div className="container mx-auto py-6 px-4 max-w-7xl">
-        <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-6">
-          <div>
-            <h1 className="text-6xl font-bold mt-6 font-sans">Good Evening, Mrinal</h1>
-            <p className="text-muted-foreground">
-              What challenges are you solving today ?
+      <div className="flex ">
+        <Sidebar />
+        
+        <main className="flex-1 ml-64 p-6">
+          <header className="mb-6">
+            <h1 className="text-5xl font-bold font-title mt-5">Hi Mrinal, Good Afternoon !</h1>
+            <p className="text-muted-foreground ml-2">
+              What challenges are you solving today?
             </p>
-          </div>
-          <Button variant="outline" size="sm" onClick={() => setSettingsOpen(true)}>
-            <Settings className="h-4 w-4 mr-2" />
-            Settings
-          </Button>
-        </header>
+          </header>
 
-        <Tabs defaultValue="questions" className="mt-6">
-          <TabsList>
-            <TabsTrigger value="questions">Questions</TabsTrigger>
-            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-          </TabsList>
+          <Tabs defaultValue="questions">
+            <TabsList>
+              <TabsTrigger value="questions">Questions</TabsTrigger>
+              <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+            </TabsList>
 
-          <TabsContent value="questions" className="space-y-6">
-            <ProgressSummary />
-            <QuestionFilters />
-            <QuestionsGrid />
-          </TabsContent>
+            <TabsContent value="questions" className="mt-6">
+              <QuestionsGrid />
+            </TabsContent>
 
-          <TabsContent value="dashboard">
-            <DashboardStats />
-          </TabsContent>
-        </Tabs>
+            <TabsContent value="dashboard" className="mt-6">
+              <DashboardStats />
+            </TabsContent>
+          </Tabs>
 
-        <QuestionModal />
-        <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
-        <Toaster position="top-center" />
+          <QuestionModal />
+          <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
+          <Toaster position="top-center" />
+        </main>
       </div>
     </QuestionProvider>
   );

@@ -3,16 +3,15 @@
 import { useQuestions } from "@/lib/context";
 import { QuestionCard } from "./question-card";
 import { motion } from "framer-motion";
+import { Search } from "lucide-react";
+import { Input } from "./ui/input";
+import { NotificationButton } from "./notification-button";
 
 export function QuestionsGrid() {
-  const { questions, filterByDifficulty, searchTerm } = useQuestions();
+  const { questions, filterByDifficulty, searchTerm, setSearchTerm } = useQuestions();
 
-  // Filter questions based on selected difficulty levels and search term
   const filteredQuestions = questions.filter((question) => {
-    // Check if question difficulty is in the selected filters
     const matchesDifficulty = filterByDifficulty.includes(question.difficulty);
-
-    // Check if search term matches question title or description
     const matchesSearch = searchTerm === '' ||
       question.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       question.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -20,7 +19,6 @@ export function QuestionsGrid() {
     return matchesDifficulty && matchesSearch;
   });
 
-  // Container animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -32,10 +30,24 @@ export function QuestionsGrid() {
   };
 
   return (
-    <div className="mt-6">
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        <div className="relative flex-1">
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="text"
+            placeholder="Search questions..."
+            className="pl-8"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <NotificationButton />
+      </div>
+
       {filteredQuestions.length > 0 ? (
         <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           variants={containerVariants}
           initial="hidden"
           animate="show"
