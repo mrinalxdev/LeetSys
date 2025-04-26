@@ -74,9 +74,25 @@
 @layer base {
   * {
     @apply border-border;
+    
   }
 
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    letter-spacing: 0.01em;
   }
+
+    h1 {
+      @apply text-3xl font-bold leading-tight tracking-tight;
+    }
+  
+    h2 {
+      @apply text-xl font-semibold leading-snug tracking-normal;
+    }
+  
+    .text-body {
+      @apply text-sm text-muted-foreground leading-relaxed;
+    }
 }

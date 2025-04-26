@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import type { Question } from "@/data/questions";
 import { useQuestions } from "@/lib/context";
 import { motion } from "framer-motion";
+import { cn } from '@/lib/utils';
 
 type QuestionCardProps = {
   question: Question;
@@ -28,7 +29,6 @@ export function QuestionCard({ question }: QuestionCardProps) {
 
   return (
     <motion.div
-      whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
@@ -36,7 +36,18 @@ export function QuestionCard({ question }: QuestionCardProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onClick={handleClick}
-      className="cursor-pointer"
+      whileHover={{ 
+        y: -2,
+        transition: { duration: 0.2 }
+      }}
+      className={cn(
+        "cursor-pointer transition-all duration-200 ease-in-out",
+        "hover:shadow-lg hover:shadow-primary/10",
+        "border-l-4", // Difficulty border
+        question.difficulty === 'easy' ? 'border-green-500 rounded-xl' :
+        question.difficulty === 'medium' ? 'border-amber-500 rounded-xl' :
+        'border-red-500 rounded-xl'
+      )}
     >
       <Card className={`h-full transition-shadow duration-200 ${isHovered ? 'shadow-lg' : 'shadow'}`}>
         <CardHeader className="pb-2">
