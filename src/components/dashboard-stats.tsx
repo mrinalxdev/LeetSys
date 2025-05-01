@@ -3,6 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useQuestions } from "@/lib/context";
+import { motion } from "framer-motion";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 // Define the entry type for the render label function
@@ -71,6 +72,9 @@ export function DashboardStats() {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+      <motion.div  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.1 }}>
       <Card>
         <CardHeader>
           <CardTitle>Progress by Difficulty</CardTitle>
@@ -113,7 +117,9 @@ export function DashboardStats() {
           </div>
         </CardContent>
       </Card>
+      </motion.div>
 
+      <motion.div  initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
       <Card>
         <CardHeader>
           <CardTitle>Languages Used</CardTitle>
@@ -132,12 +138,17 @@ export function DashboardStats() {
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="value"
+                    animationBegin={100}
+                    animationDuration={1000}
+                    animationEasing="ease-out"
                   >
-                    {languageData.map((entry) => (
-                      <Cell key={`cell-${entry.name}`} fill={COLORS[languageData.indexOf(entry) % COLORS.length]} />
+                    {languageData.map((entry, index) => (
+                      <Cell 
+                        key={`cell-${entry.name}`} 
+                        fill={COLORS[index % COLORS.length]}
+                      />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => [`${value} attempts`, 'Frequency']} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
@@ -148,7 +159,11 @@ export function DashboardStats() {
           )}
         </CardContent>
       </Card>
+      </motion.div>
 
+      <motion.div  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.1 }}>
       <Card className="md:col-span-2">
         <CardHeader>
           <CardTitle>Recent Attempts</CardTitle>
@@ -184,6 +199,7 @@ export function DashboardStats() {
           )}
         </CardContent>
       </Card>
+      </motion.div>
     </div>
   );
 }

@@ -13,28 +13,42 @@ import { Button } from "@/components/ui/button";
 import { Settings } from "lucide-react";
 import { Toaster } from "sonner";
 import { Sidebar } from '@/components/sidebar';
+import { TimeGreeting } from '@/components/time-greeting';
+import { motion } from 'framer-motion';
+import { WelcomeHeader } from '@/components/welcome-header';
 
 export default function ClientBody() {
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   return (
     <QuestionProvider>
-      <div className="flex ">
+      <div className="flex">
         <Sidebar />
         
         <main className="flex-1 ml-64 p-6">
-          <header className="mb-6">
-            <h1 className="text-5xl font-bold font-title mt-5">Hi Mrinal, Good Afternoon !</h1>
-            <p className="text-muted-foreground ml-2">
-              What challenges are you solving today?
-            </p>
-          </header>
+           <WelcomeHeader />
 
           <Tabs defaultValue="questions">
-            <TabsList>
-              <TabsTrigger value="questions">Questions</TabsTrigger>
-              <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-            </TabsList>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <TabsList className="w-full bg-background/50 backdrop-blur-md">
+                <TabsTrigger 
+                  value="questions" 
+                  className="flex-1 data-[state=active]:bg-transparent  p-4 data-[state=active]:border-2 data-[state=active]:broder-white"
+                >
+                  Questions
+                </TabsTrigger>
+                <TabsTrigger 
+                  value="dashboard" 
+                  className="flex-1 data-[state=active]:bg-transparent  p-4 data-[state=active]:border-2 data-[state=active]:broder-white"
+                >
+                  Dashboard
+                </TabsTrigger>
+              </TabsList>
+            </motion.div>
 
             <TabsContent value="questions" className="mt-6">
               <QuestionsGrid />
@@ -47,7 +61,17 @@ export default function ClientBody() {
 
           <QuestionModal />
           <SettingsDialog open={settingsOpen} onOpenChange={setSettingsOpen} />
-          <Toaster position="top-center" />
+          <Toaster 
+            position="top-center" 
+            toastOptions={{
+              classNames: {
+                toast: 'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',
+                description: 'group-[.toast]:text-muted-foreground',
+                actionButton: 'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',
+                cancelButton: 'group-[.toast]:bg-muted group-[.toast]:text-muted-foreground',
+              },
+            }} 
+          />
         </main>
       </div>
     </QuestionProvider>
