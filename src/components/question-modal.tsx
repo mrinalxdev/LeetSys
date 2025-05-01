@@ -10,6 +10,7 @@ import type { Language } from "@/data/questions";
 import { motion } from "framer-motion";
 import { useQuestions } from "@/lib/context";
 import { Check, X } from "lucide-react";
+import { SubtopicAccordion } from './subtopic-accordion';
 
 const languages: Language[] = [
   'Python',
@@ -111,38 +112,16 @@ export function QuestionModal() {
           </TabsContent>
 
           <TabsContent value="subtopics" className="mt-4">
-            <h3 className="text-lg font-semibold mb-2">Subtopics to Cover</h3>
-            <div className="space-y-2">
+            <h3 className="text-lg font-semibold mb-4">Implementation Guide</h3>
+            <div className="space-y-3">
               {activeQuestion.subtopics.map((subtopic) => (
-                <motion.div
+                <SubtopicAccordion
                   key={subtopic.id}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className={`p-3 rounded-md border flex justify-between items-center ${
-                    subtopic.completed ? 'bg-primary/10 border-primary/20' : 'bg-background'
-                  }`}
-                >
-                  <div className="flex-1">
-                    <p className="font-medium">{subtopic.title}</p>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant={subtopic.completed ? "default" : "outline"}
-                      onClick={() => handleSubtopicToggle(subtopic.id, true)}
-                    >
-                      <Check className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={!subtopic.completed ? "default" : "outline"}
-                      onClick={() => handleSubtopicToggle(subtopic.id, false)}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </motion.div>
+                  subtopic={subtopic}
+                  onToggleCompletion={(completed) => 
+                    updateSubtopicCompletion(activeQuestion.id, subtopic.id, completed)
+                  }
+                />
               ))}
             </div>
           </TabsContent>

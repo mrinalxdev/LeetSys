@@ -6,7 +6,7 @@ import { useEffect, useState } from "react"
 export function WelcomeHeader() {
   const { questions } = useQuestions()
   const [greeting, setGreeting] = useState("")
-  const [name, setName] = useState("Mrinal")
+  const [name, setName] = useState("")
 
   useEffect(() => {
     // Set greeting based on time
@@ -20,12 +20,18 @@ export function WelcomeHeader() {
     } else {
       setGreeting("Good evening")
     }
+
+    
+    const savedName = localStorage.getItem('username')
+    if (savedName) {
+      setName(savedName)
+    }
   }, [])
 
   return (
     <div className="border-b pb-4 my-6">
-      <h1 className="text-6xl font-bold">Hi, {name}! Welcome back.</h1>
-      <p className="text-muted-foreground text-sm mt-1">What questions will you solve today ?</p>
+      <h1 className="text-4xl md:text-6xl font-bold">Hi, {name}! Welcome back.</h1>
+      <p className="text-muted-foreground text-sm mt-1">What questions will you solve today?</p>
     </div>
   )
 }

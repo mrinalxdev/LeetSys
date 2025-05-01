@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { QuestionProvider } from "@/lib/context";
 import { QuestionsGrid } from "@/components/questions-grid";
 import { QuestionFilters } from "@/components/question-filters";
@@ -16,9 +16,29 @@ import { Sidebar } from '@/components/sidebar';
 import { TimeGreeting } from '@/components/time-greeting';
 import { motion } from 'framer-motion';
 import { WelcomeHeader } from '@/components/welcome-header';
+import { NameForm } from '@/components/name-form';
 
 export default function ClientBody() {
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [name, setName] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Check for name in localStorage
+    const savedName = localStorage.getItem('userName');
+    if (savedName) {
+      setName(savedName);
+    }
+    setIsLoading(false);
+  }, []);
+
+  if (isLoading) {
+    return null; // or a loading spinner
+  }
+
+  if (!name) {
+    return <NameForm onNameSet={setName} />;
+  }
 
   return (
     <QuestionProvider>
@@ -26,7 +46,7 @@ export default function ClientBody() {
         <Sidebar />
         
         <main className="flex-1 ml-64 p-6">
-           <WelcomeHeader />
+          <WelcomeHeader />
 
           <Tabs defaultValue="questions">
             <motion.div
@@ -37,13 +57,13 @@ export default function ClientBody() {
               <TabsList className="w-full bg-background/50 backdrop-blur-md">
                 <TabsTrigger 
                   value="questions" 
-                  className="flex-1 data-[state=active]:bg-transparent  p-4 data-[state=active]:border-2 data-[state=active]:broder-white"
+                  className="flex-1 data-[state=active]:bg-transparent p-4 data-[state=active]:border-2 data-[state=active]:broder-white"
                 >
                   Questions
                 </TabsTrigger>
                 <TabsTrigger 
                   value="dashboard" 
-                  className="flex-1 data-[state=active]:bg-transparent  p-4 data-[state=active]:border-2 data-[state=active]:broder-white"
+                  className="flex-1 data-[state=active]:bg-transparent p-4 data-[state=active]:border-2 data-[state=active]:broder-white"
                 >
                   Dashboard
                 </TabsTrigger>

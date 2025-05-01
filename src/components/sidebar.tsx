@@ -26,10 +26,10 @@ export function Sidebar() {
             <motion.aside 
                 initial={{ x: -300 }}
                 animate={{ x: 0 }}
-                transition={{ type: "spring", stiffness: 100 }}
-                className="fixed left-0 top-0 h-screen w-64 border-r bg-background/50 p-4 backdrop-blur-md"
+                transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                className="fixed left-0 top-0 h-screen w-64 border-r bg-background/50 p-4 backdrop-blur-md flex flex-col"
             >
-                <div className="flex flex-col h-full">
+                <div className="flex-1 flex flex-col overflow-hidden">
                     <div className="mb-6">
                         <motion.h1 
                             whileHover={{ scale: 1.02 }}
@@ -66,7 +66,7 @@ export function Sidebar() {
                         ))}
                     </nav>
 
-                    <div className="flex-1 overflow-y-auto space-y-6">
+                    <div className="flex-1 overflow-y-auto overflow-x-hidden">
                         <ProgressSummary />
                         <QuestionFilters />
                     </div>
