@@ -26,7 +26,10 @@ type QuestionContextType = {
 const QuestionContext = createContext<QuestionContextType | undefined>(undefined);
 
 export function QuestionProvider({ children }: { children: React.ReactNode }) {
-  const [questionsState, setQuestionsState] = useState<Question[]>(questions);
+  const [questionsState, setQuestionsState] = useState<Question[]>(() => {
+    const savedQuestions = localStorage.getItem('systemDesignQuestions');
+    return savedQuestions ? JSON.parse(savedQuestions) : questions;
+  });
   const [activeQuestion, setActiveQuestion] = useState<Question | null>(null);
   const [filterByDifficulty, setFilterByDifficulty] = useState<string[]>(['easy', 'medium', 'hard']);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -45,7 +48,6 @@ export function QuestionProvider({ children }: { children: React.ReactNode }) {
     }, {} as Record<Language, number>),
   };
 
-  // Load questions from localStorage on initial load
   useEffect(() => {
     const savedQuestions = localStorage.getItem('systemDesignQuestions');
     if (savedQuestions) {

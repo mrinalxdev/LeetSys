@@ -7,39 +7,38 @@ import { QuestionFilters } from "@/components/question-filters";
 import { DashboardStats } from "@/components/dashboard-stats";
 import { QuestionModal } from "@/components/question-modal";
 import { SettingsDialog } from "@/components/settings-dialog";
-import { ProgressSummary } from "@/components/progress-summary";
+// import { ProgressSummary } from "@/components/progress-summary";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Settings } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import { Settings } from "lucide-react";
 import { Toaster } from "sonner";
 import { Sidebar } from '@/components/sidebar';
-import { TimeGreeting } from '@/components/time-greeting';
+// import { TimeGreeting } from '@/components/time-greeting';
 import { motion } from 'framer-motion';
 import { WelcomeHeader } from '@/components/welcome-header';
 import { NameForm } from '@/components/name-form';
 
 export default function ClientBody() {
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [name, setName] = useState<string | null>(null);
+   const [showNameForm, setShowNameForm] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Check for name in localStorage
-    const savedName = localStorage.getItem('userName');
-    if (savedName) {
-      setName(savedName);
-    }
+    useEffect(() => {
+    const savedName = localStorage.getItem('username');
+    const savedAvatar = localStorage.getItem('userAvatar');
+    
+    // Only show name form if neither name nor avatar is set
+    setShowNameForm(!savedName && !savedAvatar);
     setIsLoading(false);
   }, []);
 
   if (isLoading) {
-    return null; // or a loading spinner
+    return null;
   }
 
-  if (!name) {
-    return <NameForm onNameSet={setName} />;
+  if (showNameForm) {
+    return <NameForm onNameSet={() => setShowNameForm(false)} />;
   }
-
   return (
     <QuestionProvider>
       <div className="flex">

@@ -7,10 +7,15 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
+const AVATAR_OPTIONS = [
+  { id: 'av1', src: '/av1.png' },
+  { id: 'av2', src: '/av2.png' },
+];
+
 export function NameForm({ onNameSet }: { onNameSet: (name: string) => void }) {
   const [name, setName] = useState("")
   const [isLoading, setIsLoading] = useState(true)
-  const [selectedAvatar, setSelectedAvatar] = useState("avatar1.png")
+  const [selectedAvatar, setSelectedAvatar] = useState(AVATAR_OPTIONS[0].id);
 
   useEffect(() => {
     const savedName = localStorage.getItem("username")
@@ -35,10 +40,7 @@ export function NameForm({ onNameSet }: { onNameSet: (name: string) => void }) {
     }
   }
 
-  const avatars = [
-    { id: "avatar1.png", src: "/av2.png", fallback: "AV1" },
-    { id: "avatar2.png", src: "/av1.png", fallback: "AV2" },
-  ]
+
 
   return (
     <div className="fixed inset-0 bg-white dark:bg-black z-50 flex items-center justify-center p-4">
@@ -49,7 +51,7 @@ export function NameForm({ onNameSet }: { onNameSet: (name: string) => void }) {
           transition={{ duration: 0.5 }}
           className="space-y-8"
         >
-          {/* Logo or Brand */}
+          
 
           {/* Heading */}
           <div className="text-center space-y-2">
@@ -84,7 +86,7 @@ export function NameForm({ onNameSet }: { onNameSet: (name: string) => void }) {
               <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 text-center">
                 Choose your avatar
               </label>
-              <div className="flex justify-center gap-4">
+              {/* <div className="flex justify-center gap-4">
                 {avatars.map((avatar) => (
                   <motion.button
                     key={avatar.id}
@@ -115,6 +117,24 @@ export function NameForm({ onNameSet }: { onNameSet: (name: string) => void }) {
                       )}
                     </AnimatePresence>
                   </motion.button>
+                ))}
+              </div> */}
+              <div className="flex justify-center gap-4 mb-6">
+                {AVATAR_OPTIONS.map((avatar) => (
+                  <div 
+                    key={avatar.id}
+                    className={`p-1 rounded-full transition-all ${
+                      selectedAvatar === avatar.id 
+                        ? 'ring-2 ring-primary bg-gradient-to-r from-primary to-purple-500' 
+                        : ''
+                    }`}
+                    onClick={() => setSelectedAvatar(avatar.id)}
+                  >
+                    <Avatar className="h-16 w-16 cursor-pointer">
+                      <AvatarImage src={avatar.src} />
+                      <AvatarFallback>AV</AvatarFallback>
+                    </Avatar>
+                  </div>
                 ))}
               </div>
             </div>
