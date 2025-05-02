@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Language } from "@/data/questions";
 import { motion } from "framer-motion";
 import { useQuestions } from "@/lib/context";
-import { Check, X } from "lucide-react";
+import { BookOpen, Check, X } from "lucide-react";
 import { SubtopicAccordion } from './subtopic-accordion';
 
 const languages: Language[] = [
@@ -27,16 +27,28 @@ export function QuestionModal() {
   const { activeQuestion, setActiveQuestion, updateSubtopicCompletion, updateQuestionAttempt } = useQuestions();
   const [selectedLanguage, setSelectedLanguage] = useState<Language>('Python');
   const [activeTab, setActiveTab] = useState('details');
+  const [showExplanation, setShowExplanation] = useState(false); 
 
   if (!activeQuestion) return null;
 
   const handleCloseModal = () => {
     setActiveQuestion(null);
+    setShowExplanation(false);
   };
 
   const handleSubtopicToggle = (subtopicId: string, completed: boolean) => {
     updateSubtopicCompletion(activeQuestion.id, subtopicId, completed);
+    // Force UI update by creating a new object reference
+    setActiveQuestion({
+      ...activeQuestion,
+      subtopics: activeQuestion.subtopics.map(st => 
+        st.id === subtopicId ? { ...st, completed } : st
+      )
+    });
   };
+
+  const completedSubtopicCount = activeQuestion.subtopics.filter(st => st.completed).length;
+  const showExplanationButton = completedSubtopicCount >= 2;
 
   const handleStartAttempt = () => {
     updateQuestionAttempt(activeQuestion.id, selectedLanguage);
@@ -111,7 +123,7 @@ export function QuestionModal() {
             </div>
           </TabsContent>
 
-          <TabsContent value="subtopics" className="mt-4">
+          {/* <TabsContent value="subtopics" className="mt-4">
             <h3 className="text-lg font-semibold mb-4">Implementation Guide</h3>
             <div className="space-y-3">
               {activeQuestion.subtopics.map((subtopic) => (
@@ -124,7 +136,46 @@ export function QuestionModal() {
                 />
               ))}
             </div>
+          </TabsContent> */}
+
+            <TabsContent value="subtopics" className="mt-4">
+            <h3 className="text-lg font-semibold mb-4">Implementation Guide</h3>
+            <div className="space-y-3">
+              {activeQuestion.subtopics.map((subtopic) => (
+                <SubtopicAccordion
+                  key={subtopic.id}
+                  subtopic={subtopic}
+                  onToggleCompletion={(completed) => 
+                    handleSubtopicToggle(subtopic.id, completed)
+                  }
+                />
+              ))}
+            </div>
+
+            {showExplanationButton && (
+              <div className="mt-6">
+                <Button 
+                  variant="outline" 
+                  className="w-full gap-2"
+                  onClick={() => setShowExplanation(!showExplanation)}
+                >
+                  <BookOpen className="h-4 w-4" />
+                  {showExplanation ? 'Hide Explanation' : 'Show Explanation'}
+                </Button>
+                
+                {showExplanation && (
+                  <div className="mt-4 p-4 bg-muted rounded-lg">
+                    <h4 className="font-medium mb-2">System Design Explanation</h4>
+                    <p className="text-sm text-muted-foreground">
+                      Here would be a detailed explanation of how to approach this system design question,
+                      including architectural diagrams, tradeoffs, and best practices.
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
           </TabsContent>
+
 
           <TabsContent value="attempt" className="mt-4 space-y-4">
             <div>

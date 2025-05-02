@@ -14,12 +14,6 @@ export function Sidebar() {
     const [settingsOpen, setSettingsOpen] = useState(false);
     const { statistics } = useQuestions();
 
-    const navItems = [
-        { icon: Home, label: "Learn", href: "#" },
-        { icon: BookOpen, label: "Videos", href: "#questions" },
-        { icon: BarChart2, label: "Contact", href: "#progress" },
-        { icon: HelpCircle, label: "Help", href: "#help" },
-    ];
 
     return (
         <>
@@ -42,7 +36,7 @@ export function Sidebar() {
                         </p>
                     </div>
 
-                    <nav className="space-y-1 mb-6">
+                    {/* <nav className="space-y-1 mb-6">
                         {navItems.map((item, index) => (
                             <motion.div
                                 key={item.label}
@@ -64,7 +58,7 @@ export function Sidebar() {
                                 </Link>
                             </motion.div>
                         ))}
-                    </nav>
+                    </nav> */}
 
                     <div className="flex-1 overflow-y-auto overflow-x-hidden">
                         <ProgressSummary />

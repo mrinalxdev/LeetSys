@@ -27,9 +27,22 @@ const QuestionContext = createContext<QuestionContextType | undefined>(undefined
 
 export function QuestionProvider({ children }: { children: React.ReactNode }) {
   const [questionsState, setQuestionsState] = useState<Question[]>(() => {
-    const savedQuestions = localStorage.getItem('systemDesignQuestions');
-    return savedQuestions ? JSON.parse(savedQuestions) : questions;
-  });
+  const savedQuestions = localStorage.getItem('systemDesignQuestions');
+  if (savedQuestions) {
+    try {
+      const parsed = JSON.parse(savedQuestions);
+      // Merge with initial questions, preserving any existing progress
+      return questions.map(q => {
+        const savedQuestion = parsed.find((sq: Question) => sq.id === q.id);
+        return savedQuestion ? { ...q, ...savedQuestion } : q;
+      });
+    } catch (e) {
+      console.error('Error parsing saved questions', e);
+      return questions;
+    }
+  }
+  return questions;
+});
   const [activeQuestion, setActiveQuestion] = useState<Question | null>(null);
   const [filterByDifficulty, setFilterByDifficulty] = useState<string[]>(['easy', 'medium', 'hard']);
   const [searchTerm, setSearchTerm] = useState<string>('');
