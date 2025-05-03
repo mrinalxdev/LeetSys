@@ -19,7 +19,7 @@
     "@radix-ui/react-tooltip": "^1.2.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "framer-motion": "^12.7.4",
+    "framer-motion": "^12.9.4",
     "lucide-react": "^0.475.0",
     "next": "^15.2.0",
     "react": "^18.3.1",

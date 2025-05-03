@@ -21,6 +21,8 @@ type QuestionContextType = {
     totalAttempts: number;
     languageDistribution: Record<Language, number>;
   };
+  seenNotifications : string[];
+  markNotificationsAsSeen : (id : string[]) => void;
 };
 
 const QuestionContext = createContext<QuestionContextType | undefined>(undefined);
@@ -31,7 +33,6 @@ export function QuestionProvider({ children }: { children: React.ReactNode }) {
   if (savedQuestions) {
     try {
       const parsed = JSON.parse(savedQuestions);
-      // Merge with initial questions, preserving any existing progress
       return questions.map(q => {
         const savedQuestion = parsed.find((sq: Question) => sq.id === q.id);
         return savedQuestion ? { ...q, ...savedQuestion } : q;
@@ -43,9 +44,22 @@ export function QuestionProvider({ children }: { children: React.ReactNode }) {
   }
   return questions;
 });
+  const [seenNotifications, setSeenNotifications] = useState<string[]>(() => {
+    const saved = localStorage.getItem('seenNotifications');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [activeQuestion, setActiveQuestion] = useState<Question | null>(null);
   const [filterByDifficulty, setFilterByDifficulty] = useState<string[]>(['easy', 'medium', 'hard']);
   const [searchTerm, setSearchTerm] = useState<string>('');
+
+  const markNotificationsAsSeen = (ids: string[]) => {
+    setSeenNotifications(prev => {
+      const newSeen = [...new Set([...prev, ...ids])];
+      localStorage.setItem('seenNotifications', JSON.stringify(newSeen));
+      return newSeen;
+    });
+  };
+
 
   // Calculate statistics based on current questions state
   const statistics = {
@@ -73,7 +87,7 @@ export function QuestionProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Save questions to localStorage whenever they change
+  
   useEffect(() => {
     localStorage.setItem('systemDesignQuestions', JSON.stringify(questionsState));
   }, [questionsState]);
@@ -139,6 +153,8 @@ export function QuestionProvider({ children }: { children: React.ReactNode }) {
     searchTerm,
     setSearchTerm,
     statistics,
+    seenNotifications,
+    markNotificationsAsSeen,
   };
 
   return (

@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { useQuestions } from "@/lib/context";
 import { BookOpen, Check, X } from "lucide-react";
 import { SubtopicAccordion } from './subtopic-accordion';
+import Link from 'next/link';
 
 const languages: Language[] = [
   'Python',
@@ -165,11 +166,13 @@ export function QuestionModal() {
                 
                 {showExplanation && (
                   <div className="mt-4 p-4 bg-muted rounded-lg">
-                    <h4 className="font-medium mb-2">System Design Explanation</h4>
                     <p className="text-sm text-muted-foreground">
-                      Here would be a detailed explanation of how to approach this system design question,
-                      including architectural diagrams, tradeoffs, and best practices.
+                      Voila on completing your first two topics on your own. Time to know get the solution for the topic, click on the notion link below and find the question you solved :) 
                     </p>
+
+                    <Link href="https://www.notion.so/newstudent/Solutions-for-LeetSys-1e816c0ef9e1803aa7cbca0ab0e0e41d?pvs=4">
+                      <p className='underline underline-offset-4'>Link to Solutions</p>
+                    </Link>
                   </div>
                 )}
               </div>
